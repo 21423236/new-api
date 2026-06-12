@@ -41,29 +41,54 @@ import {
 import { Link } from 'react-router-dom';
 import NoticeModal from '../../components/layout/NoticeModal';
 import {
-  Moonshot,
   OpenAI,
-  XAI,
-  Zhipu,
   Volcengine,
-  Cohere,
   Claude,
   Gemini,
-  Suno,
-  Minimax,
-  Wenxin,
-  Spark,
-  Qingyan,
   DeepSeek,
   Qwen,
-  Midjourney,
-  Grok,
-  AzureAI,
-  Hunyuan,
-  Xinference,
 } from '@lobehub/icons';
 
 const { Text } = Typography;
+
+const providerNodes = [
+  {
+    name: 'OpenAI',
+    icon: OpenAI,
+    position: 'classic-provider-node-openai',
+  },
+  {
+    name: 'Claude',
+    icon: Claude.Color,
+    position: 'classic-provider-node-claude',
+  },
+  {
+    name: 'Gemini',
+    icon: Gemini.Color,
+    position: 'classic-provider-node-gemini',
+  },
+  {
+    name: 'DeepSeek',
+    icon: DeepSeek.Color,
+    position: 'classic-provider-node-deepseek',
+  },
+  {
+    name: 'Qwen',
+    icon: Qwen.Color,
+    position: 'classic-provider-node-qwen',
+  },
+  {
+    name: 'Volcengine',
+    icon: Volcengine.Color,
+    position: 'classic-provider-node-volcengine',
+  },
+];
+
+const providerMetrics = [
+  { value: '30+', label: '模型供应商' },
+  { value: '100+', label: '模型计费支持' },
+  { value: '1', label: '统一网关' },
+];
 
 const Home = () => {
   const { t, i18n } = useTranslation();
@@ -252,82 +277,91 @@ const Home = () => {
                   )}
                 </div>
 
-                {/* 框架兼容性图标 */}
-                <div className='mt-12 md:mt-16 lg:mt-20 w-full'>
-                  <div className='flex items-center mb-6 md:mb-8 justify-center'>
+                {/* 模型供应商科技动效 */}
+                <div className='classic-provider-network-section mt-12 md:mt-16 lg:mt-20 w-full'>
+                  <div className='mb-6 md:mb-8 flex flex-col items-center justify-center gap-2 px-4'>
                     <Text
                       type='tertiary'
-                      className='text-lg md:text-xl lg:text-2xl font-light'
+                      className='classic-provider-network-kicker'
                     >
-                      {t('支持众多的大模型供应商')}
+                      {t('模型供应商接入网络')}
+                    </Text>
+                    <Typography.Title
+                      heading={3}
+                      className='!m-0 !text-xl md:!text-2xl lg:!text-3xl'
+                    >
+                      {t('一个网关，接入主流大模型生态')}
+                    </Typography.Title>
+                    <Text
+                      type='tertiary'
+                      className='max-w-2xl text-sm md:text-base leading-relaxed'
+                    >
+                      {t(
+                        '统一协议转换、智能路由、额度计费与可观测能力，连接 OpenAI、Claude、Gemini、DeepSeek、Qwen 等供应商。',
+                      )}
                     </Text>
                   </div>
-                  <div className='flex flex-wrap items-center justify-center gap-3 sm:gap-4 md:gap-6 lg:gap-8 max-w-5xl mx-auto px-4'>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <Moonshot size={40} />
+
+                  <div className='classic-provider-network-card mx-auto max-w-5xl'>
+                    <div className='classic-provider-network-grid' />
+                    <div className='classic-provider-network-orbit classic-provider-network-orbit-one' />
+                    <div className='classic-provider-network-orbit classic-provider-network-orbit-two' />
+
+                    <svg
+                      className='classic-provider-network-lines'
+                      viewBox='0 0 920 360'
+                      preserveAspectRatio='none'
+                      aria-hidden='true'
+                    >
+                      <path d='M460 180 L155 78' />
+                      <path d='M460 180 L460 54' />
+                      <path d='M460 180 L765 78' />
+                      <path d='M460 180 L160 282' />
+                      <path d='M460 180 L460 306' />
+                      <path d='M460 180 L760 282' />
+                    </svg>
+
+                    <div className='classic-provider-network-core'>
+                      <div className='classic-provider-network-core-ring' />
+                      <div className='classic-provider-network-core-icon'>
+                        API
+                      </div>
+                      <Text className='classic-provider-network-core-title'>
+                        {t('统一网关')}
+                      </Text>
                     </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <OpenAI size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <XAI size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <Zhipu.Color size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <Volcengine.Color size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <Cohere.Color size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <Claude.Color size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <Gemini.Color size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <Suno size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <Minimax.Color size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <Wenxin.Color size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <Spark.Color size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <Qingyan.Color size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <DeepSeek.Color size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <Qwen.Color size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <Midjourney size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <Grok size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <AzureAI.Color size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <Hunyuan.Color size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <Xinference.Color size={40} />
-                    </div>
-                    <div className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex items-center justify-center'>
-                      <Typography.Text className='!text-lg sm:!text-xl md:!text-2xl lg:!text-3xl font-bold'>
-                        30+
-                      </Typography.Text>
-                    </div>
+
+                    {providerNodes.map((provider, index) => {
+                      const ProviderIcon = provider.icon;
+                      return (
+                        <div
+                          key={provider.name}
+                          className={`classic-provider-network-node ${provider.position}`}
+                          style={{ animationDelay: `${index * 160}ms` }}
+                        >
+                          <div className='classic-provider-network-node-inner'>
+                            <span className='classic-provider-network-node-icon'>
+                              <ProviderIcon size={30} />
+                            </span>
+                            <span className='classic-provider-network-node-name'>
+                              {provider.name}
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  <div className='classic-provider-network-metrics mx-auto max-w-3xl'>
+                    {providerMetrics.map((metric) => (
+                      <div
+                        key={metric.label}
+                        className='classic-provider-network-metric'
+                      >
+                        <strong>{metric.value}</strong>
+                        <span>{t(metric.label)}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>

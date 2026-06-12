@@ -17,9 +17,9 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 import { Link } from '@tanstack/react-router'
-import { CherryStudio } from '@lobehub/icons'
-import { ArrowRight, BookOpen } from 'lucide-react'
+import { ArrowRight, BookOpen, Cpu, Network, Zap } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { getLobeIcon } from '@/lib/lobe-icon'
 import { useStatus } from '@/hooks/use-status'
 import { Button } from '@/components/ui/button'
 import { HeroTerminalDemo } from '../hero-terminal-demo'
@@ -29,19 +29,104 @@ interface HeroProps {
   isAuthenticated?: boolean
 }
 
-// Stylized three-dots indicator representing "More"
-const MoreIcon = () => (
-  <svg
-    className='text-muted-foreground/60 group-hover:text-foreground size-6 shrink-0 transition-colors'
-    viewBox='0 0 24 24'
-    fill='none'
-    xmlns='http://www.w3.org/2000/svg'
-  >
-    <circle cx='6' cy='12' r='2' fill='currentColor' />
-    <circle cx='12' cy='12' r='2' fill='currentColor' />
-    <circle cx='18' cy='12' r='2' fill='currentColor' />
-  </svg>
-)
+const PROVIDER_NODES = [
+  { name: 'OpenAI', icon: 'OpenAI.Color', position: 'left-[7%] top-[18%]' },
+  { name: 'Claude', icon: 'Claude.Color', position: 'right-[10%] top-[14%]' },
+  { name: 'Gemini', icon: 'Gemini.Color', position: 'left-[4%] bottom-[16%]' },
+  {
+    name: 'DeepSeek',
+    icon: 'DeepSeek.Color',
+    position: 'right-[6%] bottom-[18%]',
+  },
+  { name: 'Qwen', icon: 'Qwen.Color', position: 'left-[38%] top-[4%]' },
+  { name: 'Doubao', icon: 'Doubao.Color', position: 'left-[42%] bottom-[3%]' },
+] as const
+
+const PROVIDER_METRICS = [
+  { value: '50+', label: 'Providers' },
+  { value: '100+', label: 'Models' },
+  { value: '1', label: 'Unified API' },
+] as const
+
+function ProviderNetwork() {
+  const { t } = useTranslation()
+
+  return (
+    <div className='via-background/80 relative overflow-hidden rounded-3xl border border-blue-500/15 bg-gradient-to-br from-blue-500/[0.08] to-violet-500/[0.08] p-4 shadow-[0_24px_80px_rgba(37,99,235,0.12)] backdrop-blur-xl dark:border-blue-400/15 dark:shadow-[0_24px_90px_rgba(59,130,246,0.08)]'>
+      <div
+        aria-hidden
+        className='absolute inset-0 bg-[linear-gradient(to_right,rgba(59,130,246,0.12)_1px,transparent_1px),linear-gradient(to_bottom,rgba(139,92,246,0.12)_1px,transparent_1px)] [mask-image:radial-gradient(circle_at_center,black,transparent_78%)] bg-[size:2rem_2rem] opacity-40'
+      />
+      <div
+        aria-hidden
+        className='provider-network-orbit absolute top-1/2 left-1/2 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full border border-blue-400/20'
+      />
+      <div
+        aria-hidden
+        className='provider-network-orbit provider-network-orbit-reverse absolute top-1/2 left-1/2 h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full border border-violet-400/15'
+      />
+
+      <div className='relative min-h-[300px] sm:min-h-[320px]'>
+        <div className='absolute top-1/2 left-1/2 z-10 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-3'>
+          <div className='provider-network-core bg-background/90 relative flex size-24 items-center justify-center rounded-[2rem] border border-blue-400/25 shadow-[0_0_70px_rgba(59,130,246,0.28)] backdrop-blur-xl'>
+            <div className='absolute inset-2 rounded-[1.5rem] bg-gradient-to-br from-blue-500/15 to-violet-500/15' />
+            <Network className='relative size-9 text-blue-500 dark:text-blue-300' />
+          </div>
+          <div className='border-border/50 bg-background/80 text-muted-foreground rounded-full border px-3 py-1 text-[10px] font-semibold tracking-[0.2em] uppercase backdrop-blur'>
+            {t('Unified Gateway')}
+          </div>
+        </div>
+
+        <svg
+          aria-hidden='true'
+          className='absolute inset-0 size-full text-blue-500/30 dark:text-blue-300/25'
+          viewBox='0 0 420 320'
+          preserveAspectRatio='none'
+        >
+          <path className='provider-network-line' d='M210 160 L68 68' />
+          <path className='provider-network-line' d='M210 160 L350 64' />
+          <path className='provider-network-line' d='M210 160 L58 252' />
+          <path className='provider-network-line' d='M210 160 L358 250' />
+          <path className='provider-network-line' d='M210 160 L202 35' />
+          <path className='provider-network-line' d='M210 160 L212 292' />
+        </svg>
+
+        {PROVIDER_NODES.map((provider, index) => (
+          <div
+            key={provider.name}
+            className={`provider-network-node absolute ${provider.position}`}
+            style={{ animationDelay: `${index * 180}ms` }}
+          >
+            <div className='group border-border/50 bg-background/85 flex items-center gap-2 rounded-2xl border px-3 py-2 shadow-lg shadow-blue-500/5 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-blue-400/40 hover:shadow-blue-500/15'>
+              <span className='bg-muted/60 flex size-8 items-center justify-center rounded-xl'>
+                {getLobeIcon(provider.icon, 22)}
+              </span>
+              <span className='text-foreground/80 text-xs font-semibold'>
+                {provider.name}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className='border-border/40 relative mt-4 grid grid-cols-3 gap-2 border-t pt-4'>
+        {PROVIDER_METRICS.map((metric) => (
+          <div
+            key={metric.label}
+            className='border-border/40 bg-background/60 rounded-2xl border px-3 py-2 text-center backdrop-blur'
+          >
+            <div className='text-foreground text-base font-bold tracking-tight'>
+              {metric.value}
+            </div>
+            <div className='text-muted-foreground mt-0.5 text-[10px]'>
+              {t(metric.label)}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 export function Hero(props: HeroProps) {
   const { t } = useTranslation()
@@ -166,65 +251,35 @@ export function Hero(props: HeroProps) {
             )}
           </div>
 
-          {/* Supported Apps (参考图二样式，进行卡片化和信息扩充设计，增加视觉高度) */}
+          {/* Animated provider network */}
           <div
             className='landing-animate-fade-up mt-10 w-full max-w-xl opacity-0'
             style={{ animationDelay: '240ms' }}
           >
-            <div className='mb-4 flex flex-col gap-1'>
-              <span className='text-muted-foreground/50 text-[10px] font-bold tracking-[0.15em] uppercase'>
-                {t('Supported Applications')}
-              </span>
-              <p className='text-muted-foreground/60 text-xs leading-relaxed'>
+            <div className='mb-4 flex flex-col gap-2'>
+              <div className='inline-flex w-fit items-center gap-2 rounded-full border border-blue-500/15 bg-blue-500/5 px-3 py-1 text-[10px] font-bold tracking-[0.15em] text-blue-600 uppercase dark:border-blue-400/15 dark:bg-blue-400/5 dark:text-blue-300'>
+                <Cpu className='size-3' />
+                {t('Model Provider Network')}
+              </div>
+              <h2 className='text-lg font-semibold tracking-tight'>
                 {t(
-                  'Supports one-click configuration and perfectly adapts to NewAPI multi-protocol configuration.'
+                  'Connect leading AI providers through one intelligent gateway'
+                )}
+              </h2>
+              <p className='text-muted-foreground/70 max-w-lg text-xs leading-relaxed'>
+                {t(
+                  'Route OpenAI, Claude, Gemini, DeepSeek, Qwen, and more with unified protocol conversion, billing, and observability.'
                 )}
               </p>
             </div>
-            <div className='flex flex-wrap items-center gap-3'>
-              {/* Cherry Studio */}
-              <a
-                href='https://cherry-ai.com'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='group border-border/40 bg-muted/15 text-foreground/80 hover:border-border hover:bg-muted/30 hover:text-foreground flex items-center gap-3 rounded-full border px-5 py-2.5 text-sm font-medium shadow-[0_1px_2.5px_rgba(0,0,0,0.01)] backdrop-blur-xs transition-all duration-300 hover:scale-[1.02]'
-              >
-                <CherryStudio.Color size={24} className='shrink-0' />
-                <span>Cherry Studio</span>
-              </a>
-
-              {/* CC Switch */}
-              <a
-                href='https://ccswitch.io'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='group border-border/40 bg-muted/15 text-foreground/80 hover:border-border hover:bg-muted/30 hover:text-foreground flex items-center gap-3 rounded-full border px-5 py-2.5 text-sm font-medium shadow-[0_1px_2.5px_rgba(0,0,0,0.01)] backdrop-blur-xs transition-all duration-300 hover:scale-[1.02]'
-              >
-                <img
-                  src='https://ccswitch.io/favicon.png'
-                  alt='CC Switch'
-                  className='size-6 shrink-0 rounded-md object-contain'
-                  onError={(e) => {
-                    // Fallback to a styled text avatar if the remote favicon fails to load in sandbox or local environments
-                    e.currentTarget.style.display = 'none'
-                    const fallback = e.currentTarget.nextSibling as HTMLElement
-                    if (fallback) fallback.style.display = 'flex'
-                  }}
-                />
-                <span
-                  style={{ display: 'none' }}
-                  className='size-6 shrink-0 items-center justify-center rounded-md bg-blue-500/10 text-[10px] font-bold text-blue-600 dark:bg-blue-400/10 dark:text-blue-400'
-                >
-                  CC
-                </span>
-                <span>CC Switch</span>
-              </a>
-
-              {/* "更多" */}
-              <div className='group border-border/40 bg-muted/15 text-foreground/55 hover:border-border hover:bg-muted/30 hover:text-foreground flex cursor-default items-center gap-2.5 rounded-full border px-5 py-2.5 text-sm font-medium shadow-[0_1px_2.5px_rgba(0,0,0,0.01)] backdrop-blur-xs transition-all duration-300 hover:scale-[1.02]'>
-                <MoreIcon />
-                <span>{t('More Apps')}</span>
-              </div>
+            <ProviderNetwork />
+            <div className='text-muted-foreground/70 mt-3 flex items-center gap-2 text-[11px]'>
+              <Zap className='size-3.5 text-blue-500' />
+              <span>
+                {t(
+                  'Live routing, fallback, quota, and cost controls stay synchronized.'
+                )}
+              </span>
             </div>
           </div>
         </div>

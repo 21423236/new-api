@@ -13,3 +13,23 @@ bun run build
 cd ../..
 go build -ldflags "-s -w -X 'github.com/QuantumNous/new-api/common.Version=$(Get-Content VERSION)'" -o new-api.exe
 生成：
+
+
+
+
+你可以按这个顺序验证：
+cd web/classic
+bun install
+bun run build
+cd ../..
+go build -ldflags "-s -w -X 'github.com/QuantumNous/new-api/common.Version=$(Get-Content VERSION)'" -o new-api.exe
+
+
+
+
+
+cd web/default
+bun install
+bun run build
+cd ../..
+go build -ldflags "-s -w -X 'github.com/QuantumNous/new-api/common.Version=$(Get-Content VERSION)'" -o new-api.exe

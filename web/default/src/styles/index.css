@@ -598,10 +598,73 @@ For commercial licensing, please contact support@quantumnous.com
   animation: terminal-demo-pulse 1.5s ease-in-out infinite;
 }
 
+/* ── Hero provider network animations ── */
+@keyframes provider-network-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes provider-network-core {
+  0%,
+  100% {
+    box-shadow: 0 0 70px rgb(59 130 246 / 0.28);
+  }
+  50% {
+    box-shadow: 0 0 90px rgb(139 92 246 / 0.34);
+  }
+}
+
+@keyframes provider-network-orbit {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+@keyframes provider-network-dash {
+  to {
+    stroke-dashoffset: -32;
+  }
+}
+
+.provider-network-node {
+  animation: provider-network-float 4.8s ease-in-out infinite;
+}
+
+.provider-network-core {
+  animation: provider-network-core 3.2s ease-in-out infinite;
+}
+
+.provider-network-orbit {
+  animation: provider-network-orbit 18s linear infinite;
+}
+
+.provider-network-orbit-reverse {
+  animation-direction: reverse;
+  animation-duration: 24s;
+}
+
+.provider-network-line {
+  fill: none;
+  stroke: currentColor;
+  stroke-dasharray: 6 10;
+  stroke-linecap: round;
+  stroke-width: 1.4;
+  animation: provider-network-dash 1.8s linear infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .terminal-demo-blink,
   .terminal-demo-spin,
-  .terminal-demo-pulse {
+  .terminal-demo-pulse,
+  .provider-network-node,
+  .provider-network-core,
+  .provider-network-orbit,
+  .provider-network-line {
     animation: none !important;
   }
 }

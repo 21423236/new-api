@@ -1,0 +1,1 @@
+go build -ldflags "-s -w -X 'github.com/QuantumNous/new-api/common.Version=$(Get-Content VERSION)'" -o new-api.exe

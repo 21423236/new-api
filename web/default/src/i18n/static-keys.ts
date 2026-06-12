@@ -144,6 +144,8 @@ export const STATIC_I18N_KEYS = [
   'Pass-Through',
   'requests served',
   'AI models supported',
+  'Providers',
+  'Unified API',
   'uptime',
   'active users',
   'Lightning Fast',
