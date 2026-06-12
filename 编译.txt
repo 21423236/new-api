@@ -1,0 +1,15 @@
+cd web
+bun install --frozen-lockfile
+
+cd default
+$env:DISABLE_ESLINT_PLUGIN="true"
+$env:VITE_REACT_APP_VERSION=(Get-Content ../../VERSION)
+bun run build
+
+cd ../classic
+$env:VITE_REACT_APP_VERSION=(Get-Content ../../VERSION)
+bun run build
+
+cd ../..
+go build -ldflags "-s -w -X 'github.com/QuantumNous/new-api/common.Version=$(Get-Content VERSION)'" -o new-api.exe
+生成：
