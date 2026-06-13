@@ -33,3 +33,11 @@ bun install
 bun run build
 cd ../..
 go build -ldflags "-s -w -X 'github.com/QuantumNous/new-api/common.Version=$(Get-Content VERSION)'" -o new-api.exe
+
+
+
+docker compose up -d --build
+
+docker compose restart
+docker compose down
+docker compose up -d
