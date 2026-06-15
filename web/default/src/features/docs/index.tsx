@@ -69,19 +69,76 @@ const GUIDE_CARDS = [
 
 const ENDPOINTS = [
   {
+    title: 'Chat Completions',
     method: 'POST',
     path: '/v1/chat/completions',
     description: 'Chat Completions API for conversations and tool-compatible clients.',
+    request: `curl https://your-domain.example.com/v1/chat/completions \\
+  -H "Authorization: Bearer $API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "model": "your-model",
+    "messages": [
+      {"role": "user", "content": "Hello"}
+    ]
+  }'`,
+  },
+  {
+    title: 'Responses',
+    method: 'POST',
+    path: '/v1/responses',
+    description: 'Responses API for agentic workflows, tool use, and multimodal output.',
+    request: `curl https://your-domain.example.com/v1/responses \\
+  -H "Authorization: Bearer $API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "model": "your-model",
+    "input": "Hello"
+  }'`,
+  },
+  {
+    title: 'Claude Messages',
+    method: 'POST',
+    path: '/v1/messages',
+    description: 'Claude-compatible Messages API for Anthropic SDKs and clients.',
+    request: `curl https://your-domain.example.com/v1/messages \\
+  -H "x-api-key: $API_KEY" \\
+  -H "anthropic-version: 2023-06-01" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "model": "your-model",
+    "max_tokens": 1024,
+    "messages": [
+      {"role": "user", "content": "Hello"}
+    ]
+  }'`,
+  },
+  {
+    title: 'Gemini Generate Content',
+    method: 'POST',
+    path: '/v1beta/models/{model}:generateContent',
+    description: 'Gemini-compatible Generate Content API for Google SDK style integrations.',
+    request: `curl https://your-domain.example.com/v1beta/models/your-model:generateContent \\
+  -H "x-goog-api-key: $API_KEY" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "contents": [
+      {"role": "user", "parts": [{"text": "Hello"}]}
+    ]
+  }'`,
+  },
+]
+
+const COMMON_ENDPOINTS = [
+  {
+    method: 'GET',
+    path: '/v1/models',
+    description: 'List models available to your account and configured channels.',
   },
   {
     method: 'POST',
     path: '/v1/embeddings',
     description: 'Embedding API for vector search, retrieval, and semantic matching.',
-  },
-  {
-    method: 'GET',
-    path: '/v1/models',
-    description: 'List models available to your account and configured channels.',
   },
 ]
 
@@ -155,6 +212,50 @@ export function Docs() {
           })}
         </section>
 
+        <section className='border-border/60 bg-card rounded-3xl border p-6 shadow-sm md:p-8'>
+          <div className='mb-6 flex flex-col gap-2'>
+            <span className='text-primary text-sm font-semibold uppercase tracking-wide'>
+              {t('Gateway API routes')}
+            </span>
+            <h2 className='text-foreground text-2xl font-semibold'>
+              {t('Compatible endpoint examples')}
+            </h2>
+            <p className='text-muted-foreground text-sm leading-6'>
+              {t(
+                'Use the matching route for OpenAI, Claude, Gemini, and other compatible clients.'
+              )}
+            </p>
+          </div>
+          <div className='grid gap-4 lg:grid-cols-2'>
+            {ENDPOINTS.map((endpoint) => (
+              <article
+                key={endpoint.path}
+                className='border-border/60 bg-background/60 rounded-2xl border p-5'
+              >
+                <div className='flex flex-col gap-2'>
+                  <h3 className='text-foreground text-lg font-semibold'>
+                    {t(endpoint.title)}
+                  </h3>
+                  <div className='flex flex-wrap items-center gap-2'>
+                    <span className='bg-primary/10 text-primary rounded-md px-2 py-1 text-xs font-semibold'>
+                      {endpoint.method}
+                    </span>
+                    <code className='text-foreground text-sm font-medium'>
+                      {endpoint.path}
+                    </code>
+                  </div>
+                  <p className='text-muted-foreground text-sm leading-6'>
+                    {t(endpoint.description)}
+                  </p>
+                </div>
+                <pre className='bg-muted/70 text-foreground mt-4 overflow-x-auto rounded-2xl p-4 text-xs leading-6'>
+                  <code>{endpoint.request}</code>
+                </pre>
+              </article>
+            ))}
+          </div>
+        </section>
+
         <section className='grid gap-6 lg:grid-cols-[1.1fr_0.9fr]'>
           <div className='border-border/60 bg-card rounded-3xl border p-6 shadow-sm md:p-8'>
             <div className='mb-6 flex flex-col gap-2'>
@@ -189,7 +290,7 @@ export function Docs() {
                 {t('Common endpoints')}
               </h2>
               <div className='mt-5 flex flex-col gap-4'>
-                {ENDPOINTS.map((endpoint) => (
+                {COMMON_ENDPOINTS.map((endpoint) => (
                   <div key={endpoint.path} className='flex flex-col gap-1'>
                     <div className='flex flex-wrap items-center gap-2'>
                       <span className='bg-primary/10 text-primary rounded-md px-2 py-1 text-xs font-semibold'>

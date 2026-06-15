@@ -39,6 +39,8 @@ interface StatusApiResponse {
     logo?: string
     footer_html?: string
     demo_site_enabled?: boolean
+    canvas_enabled?: boolean
+    canvas_url?: string
     display_token_stat_enabled?: boolean
     display_in_currency?: boolean
     quota_display_type?: CurrencyDisplayType
@@ -96,6 +98,8 @@ export function mapStatusDataToConfig(
     logo: data.logo || DEFAULT_LOGO,
     footerHtml: data.footer_html,
     demoSiteEnabled: data.demo_site_enabled,
+    canvasEnabled: data.canvas_enabled,
+    canvasUrl: data.canvas_url,
     displayTokenStatEnabled: data.display_token_stat_enabled,
     currency,
   }

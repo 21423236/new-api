@@ -26,9 +26,11 @@ import {
   FormControl,
   FormDescription,
   FormField,
+  FormItem,
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
 import {
   SettingsControlChildren,
@@ -55,6 +57,8 @@ const headerNavSchema = z.object({
   rankingsRequireAuth: z.boolean(),
   docs: z.boolean(),
   about: z.boolean(),
+  canvasEnabled: z.boolean(),
+  canvasUrl: z.string().trim(),
 })
 
 type HeaderNavFormValues = z.infer<typeof headerNavSchema>
@@ -62,9 +66,15 @@ type HeaderNavFormValues = z.infer<typeof headerNavSchema>
 type HeaderNavigationSectionProps = {
   config: HeaderNavModulesConfig
   initialSerialized: string
+  canvasEnabled: boolean
+  canvasUrl: string
 }
 
-const toFormValues = (config: HeaderNavModulesConfig): HeaderNavFormValues => ({
+const toFormValues = (
+  config: HeaderNavModulesConfig,
+  canvasEnabled: boolean,
+  canvasUrl: string
+): HeaderNavFormValues => ({
   home:
     config.home === undefined ? HEADER_NAV_DEFAULT.home : Boolean(config.home),
   console:
@@ -93,15 +103,22 @@ const toFormValues = (config: HeaderNavModulesConfig): HeaderNavFormValues => ({
     config.about === undefined
       ? HEADER_NAV_DEFAULT.about
       : Boolean(config.about),
+  canvasEnabled: Boolean(canvasEnabled),
+  canvasUrl: canvasUrl ?? '',
 })
 
 export function HeaderNavigationSection({
   config,
   initialSerialized,
+  canvasEnabled,
+  canvasUrl,
 }: HeaderNavigationSectionProps) {
   const { t } = useTranslation()
   const updateOption = useUpdateOption()
-  const formDefaults = useMemo(() => toFormValues(config), [config])
+  const formDefaults = useMemo(
+    () => toFormValues(config, canvasEnabled, canvasUrl),
+    [config, canvasEnabled, canvasUrl]
+  )
 
   const form = useForm<HeaderNavFormValues>({
     resolver: zodResolver(headerNavSchema),
@@ -132,22 +149,29 @@ export function HeaderNavigationSection({
     }
 
     const serialized = serializeHeaderNavModules(payload)
-    if (serialized === initialSerialized) {
-      return
+    const updates: Array<{ key: string; value: string | boolean }> = []
+
+    if (serialized !== initialSerialized) {
+      updates.push({ key: 'HeaderNavModules', value: serialized })
+    }
+    if (values.canvasEnabled !== canvasEnabled) {
+      updates.push({ key: 'CanvasEnabled', value: values.canvasEnabled })
+    }
+    if (values.canvasUrl !== canvasUrl) {
+      updates.push({ key: 'CanvasUrl', value: values.canvasUrl })
     }
 
-    await updateOption.mutateAsync({
-      key: 'HeaderNavModules',
-      value: serialized,
-    })
+    for (const update of updates) {
+      await updateOption.mutateAsync(update)
+    }
   }
 
   const resetToDefault = () => {
-    form.reset(toFormValues(HEADER_NAV_DEFAULT))
+    form.reset(toFormValues(HEADER_NAV_DEFAULT, false, ''))
   }
 
   const simpleModules: Array<{
-    key: keyof HeaderNavFormValues
+    key: 'home' | 'console' | 'docs' | 'about'
     title: string
     description: string
   }> = [
@@ -174,8 +198,8 @@ export function HeaderNavigationSection({
   ]
 
   const accessModules: Array<{
-    enabledKey: keyof HeaderNavFormValues
-    requireAuthKey: keyof HeaderNavFormValues
+    enabledKey: 'pricingEnabled' | 'rankingsEnabled'
+    requireAuthKey: 'pricingRequireAuth' | 'rankingsRequireAuth'
     requireAuthDependsOn: 'pricingEnabled' | 'rankingsEnabled'
     title: string
     description: string
@@ -241,6 +265,54 @@ export function HeaderNavigationSection({
               />
             ))}
           </div>
+
+          <SettingsControlGroup>
+            <FormField
+              control={form.control}
+              name='canvasEnabled'
+              render={({ field }) => (
+                <SettingsSwitchItem>
+                  <SettingsSwitchContent>
+                    <FormLabel>{t('Canvas')}</FormLabel>
+                    <FormDescription>
+                      {t('Show a custom canvas link in the top navigation.')}
+                    </FormDescription>
+                  </SettingsSwitchContent>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </SettingsSwitchItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name='canvasUrl'
+              render={({ field }) => (
+                <SettingsControlChildren>
+                  <FormItem>
+                    <FormLabel>{t('Canvas URL')}</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder={t('https://example.com/canvas')}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      {t(
+                        'Visitors open this website in a new tab from Canvas. If no protocol is provided, https:// is used.'
+                      )}
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                </SettingsControlChildren>
+              )}
+            />
+          </SettingsControlGroup>
 
           <div className='grid gap-4 lg:grid-cols-2'>
             {accessModules.map((module) => (

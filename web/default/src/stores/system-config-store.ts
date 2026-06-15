@@ -42,6 +42,8 @@ export interface SystemConfig {
   logo: string
   footerHtml?: string
   demoSiteEnabled?: boolean
+  canvasEnabled?: boolean
+  canvasUrl?: string
   displayTokenStatEnabled?: boolean
   currency: CurrencyConfig
 }

@@ -70,6 +70,8 @@ const SITE_SECTIONS = [
         <HeaderNavigationSection
           config={headerNavConfig}
           initialSerialized={headerNavSerialized}
+          canvasEnabled={settings.CanvasEnabled}
+          canvasUrl={settings.CanvasUrl}
         />
       )
     },

@@ -26,6 +26,7 @@ export const STATIC_I18N_KEYS = [
   'Rankings',
   'Docs',
   'About',
+  'Canvas',
 
   // Sidebar views (drill-in workspaces)
   'System Settings',
@@ -51,6 +52,10 @@ export const STATIC_I18N_KEYS = [
   'All Types',
   'Chat',
   'Response',
+  'Chat Completions',
+  'Responses',
+  'Claude Messages',
+  'Gemini Generate Content',
   'Anthropic',
   'Gemini',
   'Rerank',

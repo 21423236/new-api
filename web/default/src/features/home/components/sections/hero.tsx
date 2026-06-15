@@ -17,12 +17,12 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 For commercial licensing, please contact support@quantumnous.com
 */
 import { Link } from '@tanstack/react-router'
-import { ArrowRight, BookOpen, Cpu, Network, Zap } from 'lucide-react'
+import { ArrowRight, BookOpen, Copy, Cpu, Network, Zap } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 import { getLobeIcon } from '@/lib/lobe-icon'
 import { useStatus } from '@/hooks/use-status'
 import { Button } from '@/components/ui/button'
-import { HeroTerminalDemo } from '../hero-terminal-demo'
 
 interface HeroProps {
   className?: string
@@ -132,6 +132,13 @@ export function Hero(props: HeroProps) {
   const { t } = useTranslation()
   const { status } = useStatus()
   const docsUrl = (status?.docs_link as string | undefined) || '/docs'
+  const serverAddress =
+    (status?.server_address as string | undefined) || window.location.origin
+
+  const handleCopyServerAddress = async () => {
+    await navigator.clipboard.writeText(serverAddress)
+    toast.success(t('Copied to clipboard'))
+  }
 
   const renderDocsButton = () => {
     const isExternal = docsUrl.startsWith('http')
@@ -251,11 +258,40 @@ export function Hero(props: HeroProps) {
             )}
           </div>
 
-          {/* Animated provider network */}
           <div
-            className='landing-animate-fade-up mt-10 w-full max-w-xl opacity-0'
-            style={{ animationDelay: '240ms' }}
+            className='landing-animate-fade-up border-border/50 bg-background/70 mt-5 flex w-full max-w-xl flex-col gap-3 rounded-2xl border p-3 opacity-0 shadow-sm shadow-blue-500/5 backdrop-blur sm:flex-row sm:items-center'
+            style={{ animationDelay: '220ms' }}
           >
+            <div className='min-w-0 flex-1'>
+              <div className='text-muted-foreground text-[11px] font-medium tracking-[0.16em] uppercase'>
+                {t('Current API Endpoint')}
+              </div>
+              <div className='text-foreground mt-1 truncate font-mono text-sm font-semibold'>
+                {serverAddress}
+              </div>
+              <p className='text-muted-foreground/80 mt-1 text-xs leading-relaxed'>
+                {t('Replace your base URL with this address.')}
+              </p>
+            </div>
+            <Button
+              variant='outline'
+              size='sm'
+              className='shrink-0 gap-1.5'
+              onClick={handleCopyServerAddress}
+            >
+              <Copy className='size-3.5' />
+              {t('Copy')}
+            </Button>
+          </div>
+
+        </div>
+
+        {/* Right Column: Animated provider network */}
+        <div
+          className='landing-animate-fade-up flex w-full justify-center opacity-0 lg:col-span-6'
+          style={{ animationDelay: '240ms' }}
+        >
+          <div className='w-full max-w-xl'>
             <div className='mb-4 flex flex-col gap-2'>
               <div className='inline-flex w-fit items-center gap-2 rounded-full border border-blue-500/15 bg-blue-500/5 px-3 py-1 text-[10px] font-bold tracking-[0.15em] text-blue-600 uppercase dark:border-blue-400/15 dark:bg-blue-400/5 dark:text-blue-300'>
                 <Cpu className='size-3' />
@@ -282,14 +318,6 @@ export function Hero(props: HeroProps) {
               </span>
             </div>
           </div>
-        </div>
-
-        {/* Right Column: Hero Terminal API Demo */}
-        <div
-          className='landing-animate-fade-up flex w-full justify-center opacity-0 lg:col-span-6'
-          style={{ animationDelay: '320ms' }}
-        >
-          <HeroTerminalDemo className='mt-8 lg:mt-0' />
         </div>
       </div>
     </section>

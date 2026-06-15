@@ -30,6 +30,15 @@ export type TopNavLink = {
   external?: boolean
 }
 
+function normalizeExternalUrl(url: string): string {
+  const trimmed = url.trim()
+  if (!trimmed) return ''
+  if (/^[a-z][a-z\d+.-]*:/i.test(trimmed) || trimmed.startsWith('//')) {
+    return trimmed
+  }
+  return `https://${trimmed}`
+}
+
 /**
  * Generate top navigation links based on HeaderNavModules configuration from backend /api/status
  * Backend format example (stringified JSON):
@@ -97,6 +106,13 @@ export function useTopNavLinks(): TopNavLink[] {
   // About
   if (modules?.about !== false) {
     links.push({ title: t('About'), href: '/about' })
+  }
+
+  const canvasEnabled = status?.canvas_enabled === true
+  const canvasUrl = typeof status?.canvas_url === 'string' ? status.canvas_url : ''
+  const normalizedCanvasUrl = normalizeExternalUrl(canvasUrl)
+  if (canvasEnabled && normalizedCanvasUrl) {
+    links.push({ title: t('Canvas'), href: normalizedCanvasUrl, external: true })
   }
 
   return links
