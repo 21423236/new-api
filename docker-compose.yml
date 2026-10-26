@@ -70,6 +70,8 @@ services:
 
 volumes:
   mysql_data:
+    external: true
+    name: new-api_mysql_data
 
 networks:
   new-api-network:
