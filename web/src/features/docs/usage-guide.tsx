@@ -30,6 +30,7 @@ import {
   guideTools,
   type GuideShell,
 } from './configuration'
+import { ImportConfig } from './import-config'
 
 export function UsageGuide(props: { origin: string }) {
   const { t } = useTranslation()
@@ -158,6 +159,9 @@ export function UsageGuide(props: { origin: string }) {
                     {t('Copy')}
                   </CopyButton>
                 </CodeBlock>
+                {tool.id === 'opencode' && (
+                  <ImportConfig config={guide.config} origin={props.origin} />
+                )}
               </section>
             )}
             <section className='space-y-3'>

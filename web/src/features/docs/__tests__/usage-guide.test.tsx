@@ -64,6 +64,13 @@ test('tool tabs retain the terminal and show matching configuration and launch c
   expect(codex).toHaveTextContent('%USERPROFILE%\\.codex\\config.toml')
   await user.click(screen.getByRole('tab', { name: 'OpenCode' }))
   const opencode = screen.getByRole('tabpanel', { name: 'OpenCode' })
+  const download = within(opencode)
+    .getByText('Download merge script')
+    .closest('a')
+  expect(download).toHaveAttribute('download', 'import-opencode.mjs')
+  expect(decodeURIComponent(download?.getAttribute('href') ?? '')).toContain(
+    'https://gateway.example.com/v1beta'
+  )
   await user.click(
     within(opencode).getAllByRole('button', { name: 'Copy to clipboard' })[0]
   )
