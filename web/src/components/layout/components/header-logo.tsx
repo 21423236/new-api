@@ -16,31 +16,38 @@ along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 For commercial licensing, please contact support@quantumnous.com
 */
+import { useState } from 'react'
+
 import { cn } from '@/lib/utils'
+
+import defaultLogo from '../../../../public/logo.png'
 
 interface HeaderLogoProps {
   src: string
   alt?: string
-  loading: boolean
-  logoLoaded: boolean
+  loading?: boolean
+  logoLoaded?: boolean
   className?: string
 }
 
 /**
- * Logo component for header with loading state
- * Shows image only when fully loaded for smooth UX
+ * Shared brand image with optional loading state and a bundled logo fallback.
  */
 export function HeaderLogo({
   src,
   alt = 'logo',
-  loading,
-  logoLoaded,
+  loading = false,
+  logoLoaded = true,
   className,
 }: HeaderLogoProps) {
+  const [failedSrc, setFailedSrc] = useState<string | null>(null)
+  const useFallback = !src || failedSrc === src
+
   return (
     <img
-      src={src}
+      src={useFallback ? defaultLogo : src}
       alt={alt}
+      onError={useFallback ? undefined : () => setFailedSrc(src)}
       className={cn(
         'h-6 w-6 rounded-full transition-opacity duration-200',
         !loading && logoLoaded ? 'opacity-100' : 'opacity-0',

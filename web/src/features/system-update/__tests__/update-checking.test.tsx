@@ -247,11 +247,11 @@ describe('administrator update entry', () => {
     async (version) => {
       const user = userEvent.setup()
       client.setQueryData(STATUS_QUERY_KEY, { version })
-      render(<SystemUpdateAction presentation='version' />, {
+      render(<SystemUpdateAction compact={false} />, {
         wrapper: Wrapper,
       })
       const trigger = screen.getByRole('button', {
-        name: 'System updates, current version: Unknown version',
+        name: 'Check for updates',
       })
       await user.click(trigger)
       const dialog = screen.getByRole('dialog')
@@ -398,18 +398,18 @@ describe('version label presentation', () => {
     ).not.toBeInTheDocument()
   })
 
-  test('shows an unknown-version label when the server has not supplied a version', async () => {
-    client.setQueryData(STATUS_QUERY_KEY, { version: '' })
-    render(<SystemUpdateAction presentation='version' />, { wrapper: Wrapper })
-    const trigger = screen.getByRole('button', {
-      name: 'System updates, current version: Unknown version',
-    })
-    expect(within(trigger).getByText('Unknown version')).toBeInTheDocument()
-    await waitFor(() => expect(trigger).toHaveAttribute('aria-busy', 'false'))
-    expect(
-      within(trigger).queryByText('Update available')
-    ).not.toBeInTheDocument()
-  })
+  test.each(['', 'v0.0.0'])(
+    'shows unknown version %s as plain text without opening updates',
+    async (version) => {
+      client.setQueryData(STATUS_QUERY_KEY, { version })
+      render(<SystemUpdateAction presentation='version' />, {
+        wrapper: Wrapper,
+      })
+      await userEvent.setup().click(screen.getByText('Unknown version'))
+      expect(screen.queryByRole('button')).not.toBeInTheDocument()
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    }
+  )
 
   test('retains the version after a failed check and exposes the error in its tooltip and details', async () => {
     const user = userEvent.setup()

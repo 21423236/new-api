@@ -24,6 +24,8 @@ import { useStatus } from '@/hooks/use-status'
 import { useSystemConfig } from '@/hooks/use-system-config'
 import { cn } from '@/lib/utils'
 
+import { HeaderLogo } from './header-logo'
+
 interface FooterLink {
   text: string
   href: string
@@ -38,6 +40,7 @@ interface FooterProps {
   logo?: string
   name?: string
   columns?: FooterColumnProps[]
+  hideSiteCopyright?: boolean
   copyright?: string
   className?: string
 }
@@ -255,7 +258,7 @@ export function Footer(props: FooterProps) {
           {/* Brand column */}
           <div className='shrink-0'>
             <Link to='/' className='group flex items-center gap-2.5'>
-              <img
+              <HeaderLogo
                 src={displayLogo}
                 alt={displayName}
                 className='size-7 rounded-lg object-contain'
@@ -272,14 +275,14 @@ export function Footer(props: FooterProps) {
           {/* Links columns */}
           {isDemoSiteMode && (
             <div className='grid grid-cols-3 gap-8 md:gap-16'>
-              {displayColumns.map((column, index) => (
-                <div key={index}>
+              {displayColumns.map((column) => (
+                <div key={column.title}>
                   <p className='text-muted-foreground/50 mb-3 text-xs font-medium tracking-wider uppercase'>
                     {t(column.title)}
                   </p>
                   <ul className='space-y-2.5'>
-                    {column.links.map((link, linkIndex) => (
-                      <li key={linkIndex}>
+                    {column.links.map((link) => (
+                      <li key={link.href}>
                         <FooterLinkItem link={link} />
                       </li>
                     ))}
@@ -294,11 +297,17 @@ export function Footer(props: FooterProps) {
             attribution on the right; wraps on narrow screens. */}
         <div className='border-border/30 mt-12 flex flex-col items-center justify-between gap-x-3 gap-y-2 border-t pt-6 sm:flex-row'>
           <div className='text-muted-foreground/40 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-xs sm:justify-start'>
-            <span>
-              &copy; {currentYear} {displayName}.{' '}
-              {props.copyright ?? t('footer.defaultCopyright')}
-            </span>
-            <LegalLinks leadingSeparator />
+            {(!props.hideSiteCopyright || displayName === 'New API') && (
+              <span>
+                &copy; {currentYear} {displayName}.{' '}
+                {props.copyright ?? t('footer.defaultCopyright')}
+              </span>
+            )}
+            <LegalLinks
+              leadingSeparator={
+                !props.hideSiteCopyright || displayName === 'New API'
+              }
+            />
           </div>
           <ProjectAttribution currentYear={currentYear} />
         </div>

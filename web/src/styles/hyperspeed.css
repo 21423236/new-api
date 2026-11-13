@@ -1,0 +1,169 @@
+.hyperspeed {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.hyperspeed canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-hyperspeed {
+  background:
+    radial-gradient(
+      ellipse at 50% 55%,
+      oklch(0.7 0.15 220 / 22%),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse at 20% 85%,
+      oklch(0.65 0.22 320 / 16%),
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse at 85% 80%,
+      oklch(0.6 0.2 290 / 16%),
+      transparent 55%
+    );
+}
+.hero-hyperspeed .hyperspeed {
+  pointer-events: auto;
+  cursor: grab;
+  opacity: 0.9;
+}
+.hero-hyperspeed[data-boosting='true'] .hyperspeed {
+  cursor: grabbing;
+}
+.dark .hero-hyperspeed .hyperspeed {
+  opacity: 1;
+}
+
+.hero-hyperspeed-vignette {
+  background:
+    radial-gradient(
+      ellipse 42% 30% at 50% 46%,
+      color-mix(in oklab, var(--background) 55%, transparent),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 85% 75% at 50% 50%,
+      transparent 55%,
+      var(--background)
+    ),
+    linear-gradient(to bottom, transparent 78%, var(--background));
+}
+.dark .hero-hyperspeed-vignette {
+  background:
+    radial-gradient(
+      ellipse 40% 28% at 50% 46%,
+      color-mix(in oklab, var(--background) 40%, transparent),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 90% 80% at 50% 50%,
+      transparent 60%,
+      var(--background)
+    ),
+    linear-gradient(to bottom, transparent 80%, var(--background));
+}
+
+.hero-hyperspeed-logos {
+  container-type: size;
+}
+.hero-hyperspeed-logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -1.5rem 0 0 -1.5rem;
+  transform: translate(var(--dx), var(--dy)) scale(1);
+  transition:
+    transform 0.9s cubic-bezier(0.5, 0, 0.2, 1),
+    opacity 0.9s ease;
+  opacity: 0.85;
+}
+.hero-hyperspeed-logo-float {
+  display: flex;
+  width: 3rem;
+  height: 3rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in oklab, var(--foreground) 12%, transparent);
+  border-radius: 9999px;
+  background: color-mix(in oklab, var(--background) 55%, transparent);
+  box-shadow: 0 0 24px oklch(0.7 0.15 230 / 25%);
+  backdrop-filter: blur(6px);
+  animation: hero-logo-float 6s ease-in-out infinite;
+  animation-delay: var(--delay);
+}
+.hero-hyperspeed[data-boosting='true'] .hero-hyperspeed-logo {
+  transform: translate(0, 4cqh) scale(0.2);
+  opacity: 0;
+  transition-duration: 0.6s;
+}
+
+.hero-hyperspeed-logo:nth-child(1) {
+  --dx: -40cqw;
+  --dy: -24cqh;
+  --delay: 0s;
+}
+.hero-hyperspeed-logo:nth-child(2) {
+  --dx: 38cqw;
+  --dy: -28cqh;
+  --delay: -1.2s;
+}
+.hero-hyperspeed-logo:nth-child(3) {
+  --dx: -44cqw;
+  --dy: 6cqh;
+  --delay: -2.4s;
+}
+.hero-hyperspeed-logo:nth-child(4) {
+  --dx: 43cqw;
+  --dy: 2cqh;
+  --delay: -3.6s;
+}
+.hero-hyperspeed-logo:nth-child(5) {
+  --dx: -32cqw;
+  --dy: 30cqh;
+  --delay: -0.6s;
+}
+.hero-hyperspeed-logo:nth-child(6) {
+  --dx: 33cqw;
+  --dy: 28cqh;
+  --delay: -1.8s;
+}
+.hero-hyperspeed-logo:nth-child(7) {
+  --dx: 0cqw;
+  --dy: -36cqh;
+  --delay: -3s;
+}
+
+@keyframes hero-logo-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-hyperspeed .hyperspeed {
+    opacity: 0.6;
+  }
+  .hero-hyperspeed-logos {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-hyperspeed .hyperspeed {
+    display: none;
+  }
+  .hero-hyperspeed-logo,
+  .hero-hyperspeed-logo-float {
+    animation: none;
+    transition: none;
+  }
+}

@@ -79,6 +79,14 @@ function AdminSystemUpdateAction(props: SystemUpdateActionProps) {
         : versionDescription
   }
 
+  if (versionPresentation && !update.currentVersion?.trim()) {
+    return (
+      <span className='text-muted-foreground px-1.5 font-mono text-xs'>
+        {version}
+      </span>
+    )
+  }
+
   let triggerContent = (
     <>
       {update.checking ? (
